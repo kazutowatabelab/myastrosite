@@ -97,13 +97,13 @@ const posts = (await getCollection('blog'))
 
 			.shape {
 				position: absolute;
-				opacity: 0.1;
+				opacity: 0.3;
 			}
 
 			.shape-1 {
 				width: 200px;
 				height: 200px;
-				border: 2px solid var(--accent);
+				border: 2px solid #6bb3ff;
 				border-radius: 50%;
 				top: 10%;
 				left: 10%;
@@ -113,7 +113,7 @@ const posts = (await getCollection('blog'))
 			.shape-2 {
 				width: 150px;
 				height: 150px;
-				border: 2px solid var(--accent);
+				border: 2px solid #6bb3ff;
 				top: 60%;
 				right: 15%;
 				transform: rotate(45deg);
@@ -123,7 +123,7 @@ const posts = (await getCollection('blog'))
 			.shape-3 {
 				width: 100px;
 				height: 100px;
-				border: 2px solid var(--accent);
+				border: 2px solid #6bb3ff;
 				border-radius: 20%;
 				bottom: 20%;
 				left: 20%;
@@ -133,7 +133,7 @@ const posts = (await getCollection('blog'))
 			.shape-4 {
 				width: 80px;
 				height: 80px;
-				border: 2px solid var(--accent);
+				border: 2px solid #6bb3ff;
 				top: 30%;
 				right: 30%;
 				transform: rotate(30deg);
@@ -143,7 +143,7 @@ const posts = (await getCollection('blog'))
 			.shape-5 {
 				width: 300px;
 				height: 2px;
-				background: linear-gradient(90deg, transparent, var(--accent), transparent);
+				background: linear-gradient(90deg, transparent, #6bb3ff, transparent);
 				top: 50%;
 				left: -100px;
 				animation: slideRight 12s linear infinite;
@@ -152,7 +152,7 @@ const posts = (await getCollection('blog'))
 			.shape-6 {
 				width: 2px;
 				height: 300px;
-				background: linear-gradient(180deg, transparent, var(--accent), transparent);
+				background: linear-gradient(180deg, transparent, #6bb3ff, transparent);
 				top: -100px;
 				right: 40%;
 				animation: slideDown 10s linear infinite;
@@ -187,11 +187,11 @@ const posts = (await getCollection('blog'))
 
 			@keyframes pulse {
 				0%, 100% {
-					opacity: 0.1;
+					opacity: 0.3;
 					transform: rotate(30deg) scale(1);
 				}
 				50% {
-					opacity: 0.2;
+					opacity: 0.5;
 					transform: rotate(30deg) scale(1.2);
 				}
 			}
