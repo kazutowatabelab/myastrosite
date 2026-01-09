@@ -412,6 +412,13 @@ const posts = (await getCollection('blog'))
 			<section class="content-section">
 				<h2 class="section-title">Latest Logs</h2>
 				<div class="logs-grid">
+					<a href="/posts/first-post" class="log-card">
+						<h3 class="log-card-title">KZ Lab 始動！</h3>
+						<p class="log-card-description">ついに自分の開発ログを公開しました。</p>
+						<p class="log-card-date">
+							<FormattedDate date={new Date('2026-01-10')} />
+						</p>
+					</a>
 					{posts.length > 0 ? (
 						posts.map((post) => (
 							<a href={`/blog/${post.id}/`} class="log-card">
