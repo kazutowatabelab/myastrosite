@@ -43,16 +43,175 @@ const posts = (await getCollection('blog'))
 				align-items: center;
 				padding: 8rem 2rem;
 				background: 
-					linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%),
+					linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%);
+				background-size: 100% 100%;
+				text-align: center;
+				overflow: hidden;
+			}
+
+			.hero-section::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: 
 					repeating-linear-gradient(
 						0deg,
 						transparent,
 						transparent 2px,
 						rgba(255, 255, 255, 0.02) 2px,
 						rgba(255, 255, 255, 0.02) 4px
+					),
+					repeating-linear-gradient(
+						90deg,
+						transparent,
+						transparent 2px,
+						rgba(255, 255, 255, 0.02) 2px,
+						rgba(255, 255, 255, 0.02) 4px
 					);
-				background-size: 100% 100%, 40px 40px;
-				text-align: center;
+				background-size: 40px 40px;
+				animation: gridMove 20s linear infinite;
+				opacity: 0.5;
+			}
+
+			@keyframes gridMove {
+				0% {
+					transform: translate(0, 0);
+				}
+				100% {
+					transform: translate(40px, 40px);
+				}
+			}
+
+			.geometric-shapes {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				pointer-events: none;
+				overflow: hidden;
+			}
+
+			.shape {
+				position: absolute;
+				opacity: 0.1;
+			}
+
+			.shape-1 {
+				width: 200px;
+				height: 200px;
+				border: 2px solid var(--accent);
+				border-radius: 50%;
+				top: 10%;
+				left: 10%;
+				animation: rotate 30s linear infinite;
+			}
+
+			.shape-2 {
+				width: 150px;
+				height: 150px;
+				border: 2px solid var(--accent);
+				top: 60%;
+				right: 15%;
+				transform: rotate(45deg);
+				animation: rotateReverse 25s linear infinite;
+			}
+
+			.shape-3 {
+				width: 100px;
+				height: 100px;
+				border: 2px solid var(--accent);
+				border-radius: 20%;
+				bottom: 20%;
+				left: 20%;
+				animation: float 15s ease-in-out infinite;
+			}
+
+			.shape-4 {
+				width: 80px;
+				height: 80px;
+				border: 2px solid var(--accent);
+				top: 30%;
+				right: 30%;
+				transform: rotate(30deg);
+				animation: pulse 8s ease-in-out infinite;
+			}
+
+			.shape-5 {
+				width: 300px;
+				height: 2px;
+				background: linear-gradient(90deg, transparent, var(--accent), transparent);
+				top: 50%;
+				left: -100px;
+				animation: slideRight 12s linear infinite;
+			}
+
+			.shape-6 {
+				width: 2px;
+				height: 300px;
+				background: linear-gradient(180deg, transparent, var(--accent), transparent);
+				top: -100px;
+				right: 40%;
+				animation: slideDown 10s linear infinite;
+			}
+
+			@keyframes rotate {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			@keyframes rotateReverse {
+				0% {
+					transform: rotate(45deg);
+				}
+				100% {
+					transform: rotate(405deg);
+				}
+			}
+
+			@keyframes float {
+				0%, 100% {
+					transform: translateY(0) rotate(0deg);
+				}
+				50% {
+					transform: translateY(-30px) rotate(180deg);
+				}
+			}
+
+			@keyframes pulse {
+				0%, 100% {
+					opacity: 0.1;
+					transform: rotate(30deg) scale(1);
+				}
+				50% {
+					opacity: 0.2;
+					transform: rotate(30deg) scale(1.2);
+				}
+			}
+
+			@keyframes slideRight {
+				0% {
+					left: -100px;
+				}
+				100% {
+					left: calc(100% + 100px);
+				}
+			}
+
+			@keyframes slideDown {
+				0% {
+					top: -100px;
+				}
+				100% {
+					top: calc(100% + 100px);
+				}
 			}
 
 			.hero-title {
@@ -64,6 +223,8 @@ const posts = (await getCollection('blog'))
 				-webkit-text-fill-color: transparent;
 				background-clip: text;
 				letter-spacing: -0.02em;
+				position: relative;
+				z-index: 1;
 			}
 
 			.hero-subtitle {
@@ -72,6 +233,8 @@ const posts = (await getCollection('blog'))
 				font-weight: 400;
 				margin: 0;
 				letter-spacing: 0.01em;
+				position: relative;
+				z-index: 1;
 			}
 
 			.content-section {
@@ -197,6 +360,14 @@ const posts = (await getCollection('blog'))
 		<Header />
 		<main>
 			<section class="hero-section">
+				<div class="geometric-shapes">
+					<div class="shape shape-1"></div>
+					<div class="shape shape-2"></div>
+					<div class="shape shape-3"></div>
+					<div class="shape shape-4"></div>
+					<div class="shape shape-5"></div>
+					<div class="shape shape-6"></div>
+				</div>
 				<h1 class="hero-title">KZ Lab</h1>
 				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
 			</section>
