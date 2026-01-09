@@ -105,6 +105,15 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				line-height: 1.8;
 			}
 
+			/* Markdownコンテンツのスタイルを確実に適用 */
+			.article-content :global(*) {
+				color: inherit;
+			}
+
+			.article-content :global(p) {
+				margin-bottom: 1.5rem;
+			}
+
 			.article-content h1,
 			.article-content h2,
 			.article-content h3,
@@ -243,7 +252,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	<body>
 		<Header />
 		<main>
-			<article class="article-container">
+			<div class="article-container">
 				<header class="article-header">
 					{heroImage && (
 						<div class="hero-image-container">
@@ -265,7 +274,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				<div class="article-content">
 					<slot />
 				</div>
-			</article>
+			</div>
 		</main>
 		<Footer />
 	</body>
