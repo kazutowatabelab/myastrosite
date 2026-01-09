@@ -260,7 +260,7 @@ const posts = (await getCollection('blog'))
 
 			.log-card {
 				background: var(--bg-card);
-				border: 1px solid var(--border);
+				border: 2px solid var(--accent);
 				border-radius: 12px;
 				padding: 2rem;
 				transition: all 0.3s ease;
@@ -268,12 +268,14 @@ const posts = (await getCollection('blog'))
 				flex-direction: column;
 				text-decoration: none;
 				color: inherit;
+				cursor: pointer;
+				box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15);
 			}
 
 			.log-card:hover {
-				transform: translateY(-4px);
-				border-color: var(--accent);
-				box-shadow: 0 8px 24px rgba(74, 158, 255, 0.1);
+				transform: translateY(-6px);
+				border-color: var(--accent-hover);
+				box-shadow: 0 12px 32px rgba(74, 158, 255, 0.25);
 			}
 
 			.log-card:visited {
@@ -285,6 +287,15 @@ const posts = (await getCollection('blog'))
 				min-height: 200px;
 				justify-content: center;
 				align-items: center;
+				border: 2px solid var(--border);
+				cursor: default;
+				box-shadow: none;
+			}
+
+			.log-card.empty:hover {
+				transform: none;
+				border-color: var(--border);
+				box-shadow: none;
 			}
 
 			.log-card-image {
@@ -297,16 +308,29 @@ const posts = (await getCollection('blog'))
 			}
 
 			.log-card-title {
-				font-size: 1.25rem;
-				font-weight: 600;
-				margin: 0 0 0.75rem 0;
+				font-size: 1.75rem;
+				font-weight: 700;
+				margin: 0 0 1rem 0;
 				color: var(--text-primary);
+				line-height: 1.3;
+			}
+
+			.log-card-description {
+				font-size: 1rem;
+				color: var(--text-secondary);
+				margin: 0 0 1.25rem 0;
+				line-height: 1.6;
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
 			}
 
 			.log-card-date {
-				font-size: 0.9rem;
-				color: var(--text-secondary);
+				font-size: 0.875rem;
+				color: var(--accent);
 				margin: 0;
+				font-weight: 500;
 			}
 
 			.skills-section {
@@ -358,6 +382,14 @@ const posts = (await getCollection('blog'))
 					grid-template-columns: 1fr;
 					gap: 1.5rem;
 				}
+
+				.log-card-title {
+					font-size: 1.5rem;
+				}
+
+				.log-card-description {
+					font-size: 0.95rem;
+				}
 			}
 		</style>
 	</head>
@@ -393,6 +425,7 @@ const posts = (await getCollection('blog'))
 									/>
 								)}
 								<h3 class="log-card-title">{post.data.title}</h3>
+								<p class="log-card-description">{post.data.description}</p>
 								<p class="log-card-date">
 									<FormattedDate date={post.data.pubDate} />
 								</p>
