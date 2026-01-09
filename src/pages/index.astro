@@ -1,21 +1,255 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			:root {
+				--bg-primary: #0a0a0f;
+				--bg-secondary: #121218;
+				--bg-card: #1a1a24;
+				--text-primary: #e8e8e8;
+				--text-secondary: #a0a0a8;
+				--accent: #4a9eff;
+				--accent-hover: #6bb3ff;
+				--border: #2a2a35;
+			}
+
+			body {
+				background: var(--bg-primary);
+				color: var(--text-primary);
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+			}
+
+			.hero-section {
+				position: relative;
+				min-height: 60vh;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 8rem 2rem;
+				background: 
+					linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%),
+					repeating-linear-gradient(
+						0deg,
+						transparent,
+						transparent 2px,
+						rgba(255, 255, 255, 0.02) 2px,
+						rgba(255, 255, 255, 0.02) 4px
+					);
+				background-size: 100% 100%, 40px 40px;
+				text-align: center;
+			}
+
+			.hero-title {
+				font-size: 4.5rem;
+				font-weight: 700;
+				margin: 0 0 1.5rem 0;
+				background: linear-gradient(135deg, #ffffff 0%, #a0a0a8 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				letter-spacing: -0.02em;
+			}
+
+			.hero-subtitle {
+				font-size: 1.5rem;
+				color: var(--text-secondary);
+				font-weight: 400;
+				margin: 0;
+				letter-spacing: 0.01em;
+			}
+
+			.content-section {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 6rem 2rem;
+			}
+
+			.section-title {
+				font-size: 2.5rem;
+				font-weight: 700;
+				margin: 0 0 3rem 0;
+				color: var(--text-primary);
+				letter-spacing: -0.01em;
+			}
+
+			.logs-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+				gap: 2rem;
+				margin-bottom: 6rem;
+			}
+
+			.log-card {
+				background: var(--bg-card);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 2rem;
+				transition: all 0.3s ease;
+				display: flex;
+				flex-direction: column;
+				text-decoration: none;
+				color: inherit;
+			}
+
+			.log-card:hover {
+				transform: translateY(-4px);
+				border-color: var(--accent);
+				box-shadow: 0 8px 24px rgba(74, 158, 255, 0.1);
+			}
+
+			.log-card:visited {
+				color: inherit;
+			}
+
+			.log-card.empty {
+				opacity: 0.5;
+				min-height: 200px;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.log-card-image {
+				width: 100%;
+				height: 180px;
+				object-fit: cover;
+				border-radius: 8px;
+				margin-bottom: 1.5rem;
+				background: var(--bg-secondary);
+			}
+
+			.log-card-title {
+				font-size: 1.25rem;
+				font-weight: 600;
+				margin: 0 0 0.75rem 0;
+				color: var(--text-primary);
+			}
+
+			.log-card-date {
+				font-size: 0.9rem;
+				color: var(--text-secondary);
+				margin: 0;
+			}
+
+			.skills-section {
+				margin-top: 6rem;
+			}
+
+			.skills-badges {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75rem;
+			}
+
+			.skill-badge {
+				display: inline-block;
+				padding: 0.5rem 1rem;
+				background: var(--bg-card);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				font-size: 0.9rem;
+				color: var(--text-secondary);
+				transition: all 0.2s ease;
+			}
+
+			.skill-badge:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+				transform: translateY(-2px);
+			}
+
+			@media (max-width: 768px) {
+				.hero-title {
+					font-size: 3rem;
+				}
+
+				.hero-subtitle {
+					font-size: 1.25rem;
+				}
+
+				.content-section {
+					padding: 4rem 1.5rem;
+				}
+
+				.logs-grid {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>kazutoのゲーム開発ブログ</h1>
-			<h2>2026年、爆速で開発中</h2>
-			<p>UnityやAIを使ったゲーム開発の記録をここに残します。</p>
+			<section class="hero-section">
+				<h1 class="hero-title">KZ Lab</h1>
+				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
+			</section>
+
+			<section class="content-section">
+				<h2 class="section-title">Latest Logs</h2>
+				<div class="logs-grid">
+					{posts.length > 0 ? (
+						posts.map((post) => (
+							<a href={`/blog/${post.id}/`} class="log-card">
+								{post.data.heroImage && (
+									<Image
+										class="log-card-image"
+										src={post.data.heroImage}
+										alt={post.data.title}
+										width={400}
+										height={180}
+									/>
+								)}
+								<h3 class="log-card-title">{post.data.title}</h3>
+								<p class="log-card-date">
+									<FormattedDate date={post.data.pubDate} />
+								</p>
+							</a>
+						))
+					) : (
+						<>
+							<div class="log-card empty">
+								<p style="color: var(--text-secondary);">Coming soon...</p>
+							</div>
+							<div class="log-card empty">
+								<p style="color: var(--text-secondary);">Coming soon...</p>
+							</div>
+							<div class="log-card empty">
+								<p style="color: var(--text-secondary);">Coming soon...</p>
+							</div>
+						</>
+					)}
+				</div>
+
+				<div class="skills-section">
+					<h2 class="section-title">Skills</h2>
+					<div class="skills-badges">
+						<span class="skill-badge">Unity</span>
+						<span class="skill-badge">C#</span>
+						<span class="skill-badge">Astro</span>
+						<span class="skill-badge">Cursor</span>
+						<span class="skill-badge">Python</span>
+						<span class="skill-badge">AI</span>
+						<span class="skill-badge">Game Development</span>
+					</div>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>
