@@ -57,7 +57,7 @@ const posts = (await getCollection('blog'))
 				<h2>Latest Logs</h2>
 				<div class="logs-grid">
 					{posts.map((post) => (
-						<a href={`/blog/${post.slug}/`} class="log-card">
+						<a href={`/blog/${post.id}/`} class="log-card">
 							<h3>{post.data.title}</h3>
 							<p>{post.data.description}</p>
 							<p><FormattedDate date={post.data.pubDate} /></p>
