@@ -167,7 +167,7 @@ const posts = allPosts
 				<div class="logs-grid">
 					{posts.length > 0 ? (
 						posts.map((post) => (
-							<a href={`/blog/${post.slug}/`} class="log-card">
+							<a href={`/blog/${post.id}/`} class="log-card">
 								<h3 class="log-card-title">{post.data.title}</h3>
 								<p class="log-card-description">{post.data.description}</p>
 								<p class="log-card-date">
