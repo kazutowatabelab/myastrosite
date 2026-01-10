@@ -154,13 +154,13 @@ const posts = allPosts
 	<body>
 		<Header />
 		<main>
-			<section class="hero">
-				<h1>KZ Lab</h1>
-				<p>UnityとAIの可能性を探求する。</p>
+			<section class=""hero-section">
+				<h1 class="hero-title">KZ Lab</h1>
+				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
 			</section>
 
-			<section>
-				<h2>Latest Logs</h2>
+			<section class="content-section">
+				<h2 class="section-title">Latest Logs</h2>
 				<div class="logs-grid">
 					{posts.map((post) => (
 						<a href={`/blog/${post.id}/`} class="log-card">
