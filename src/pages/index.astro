@@ -1,10 +1,11 @@
 ---
-// ... 他のインポート ...
+import { getCollection } from 'astro:content';
+// ...他のインポートはそのまま...
 
-const posts = (await getCollection('blog'))
+const allPosts = await getCollection('blog');
+const posts = allPosts
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	/* ↓ ここにこれを書き足します */
-	.slice(0, 3); 
+	.slice(0, 3); // ここで確実に3枚に絞る
 ---
 
 <!doctype html>
