@@ -149,7 +149,42 @@ const posts = allPosts
 				font-weight: 500;
 			}
 
-			@media (max-width: 768px) {
+			.geom-animations {
+	pointer-events: none;
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	overflow: hidden;
+}
+.circle {
+	position: absolute; left:10%; top:15%;
+	width: 120px; height: 120px;
+	border-radius: 50%;
+	border: 3px solid #6bb3ff;
+	opacity: .28;
+	animation: geo-circ 10s linear infinite alternate;
+}
+@keyframes geo-circ { to { transform: translateY(30px) scale(1.1) rotate(70deg); } }
+.triangle {
+	position: absolute; right:8%; top:35%;
+	width: 0; height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 86px solid #4a9eff44;
+	opacity: .24;
+	animation: geo-tri 13s linear infinite alternate;
+}
+@keyframes geo-tri { to { transform: translateX(-30px) scale(1.05) rotate(-45deg); } }
+.rect {
+	position: absolute; left:30%; bottom:10%;
+	width: 80px; height: 80px;
+	border: 2.5px solid #56c9fe; border-radius: 12px;
+	opacity: .22;
+	animation: geo-rect 9s linear infinite alternate;
+}
+@keyframes geo-rect { to { transform: scale(1.2) rotate(25deg); } }
+
+@media (max-width: 768px) {
 				.hero-title { font-size: 2.5rem; }
 				.hero-subtitle { font-size: 1.1rem; }
 				.logs-grid { grid-template-columns: 1fr; }
@@ -160,6 +195,11 @@ const posts = allPosts
 		<Header />
 		<main>
 			<section class="hero-section">
+				<div class="geom-animations">
+					<div class="circle"></div>
+					<div class="triangle"></div>
+					<div class="rect"></div>
+				</div>
 				<h1 class="hero-title">KZ Lab</h1>
 				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
 			</section>
