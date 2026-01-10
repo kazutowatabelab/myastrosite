@@ -16,7 +16,7 @@ const posts = allPosts
 <html lang="ja">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
+<style>
 	:root {
 		--bg-primary: #0a0a0f;
 		--bg-secondary: #121218;
@@ -28,6 +28,65 @@ const posts = allPosts
 		--border: #2a2a35;
 	}
 
+	body {
+		background: var(--bg-primary);
+		color: var(--text-primary);
+		margin: 0;
+		font-family: sans-serif;
+	}
+
+	/* --- ヒーローセクション（タイトルエリア） --- */
+	.hero-section {
+		position: relative;
+		min-height: 40vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 4rem 2rem;
+		background: linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%);
+		text-align: center;
+		overflow: hidden;
+	}
+
+	/* グリッド背景のアニメーション */
+	.hero-section::before {
+		content: '';
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
+		background: 
+			repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px),
+			repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
+		background-size: 40px 40px;
+		animation: gridMove 20s linear infinite;
+		opacity: 0.5;
+	}
+
+	@keyframes gridMove {
+		0% { transform: translate(0, 0); }
+		100% { transform: translate(40px, 40px); }
+	}
+
+	.hero-title {
+		font-size: 3.5rem;
+		font-weight: 700;
+		margin: 0 0 1rem 0;
+		background: linear-gradient(135deg, #ffffff 0%, #a0a0a8 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		position: relative;
+		z-index: 1;
+	}
+
+	.hero-subtitle {
+		font-size: 1.25rem;
+		color: var(--text-secondary);
+		position: relative;
+		z-index: 1;
+	}
+
+	/* --- メインコンテンツ（記事カードエリア） --- */
 	.content-section {
 		max-width: 1200px;
 		margin: 0 auto;
@@ -41,10 +100,9 @@ const posts = allPosts
 		color: var(--text-primary);
 	}
 
-	/* 💡 ここが「横に3つ」並べる魔法の設定です */
 	.logs-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr); /* 3等分 */
+		grid-template-columns: repeat(3, 1fr);
 		gap: 2rem;
 		margin-bottom: 6rem;
 	}
@@ -73,7 +131,6 @@ const posts = allPosts
 		font-weight: 700;
 		margin: 0 0 1rem 0;
 		color: var(--text-primary);
-		line-height: 1.3;
 	}
 
 	.log-card-description {
@@ -85,14 +142,12 @@ const posts = allPosts
 	.log-card-date {
 		font-size: 0.875rem;
 		color: var(--accent);
-		margin-top: auto; /* 日付を下寄せにする */
+		margin-top: auto;
 	}
 
-	/* スマホ表示では1列にする */
 	@media (max-width: 768px) {
-		.logs-grid {
-			grid-template-columns: 1fr;
-		}
+		.hero-title { font-size: 2.5rem; }
+		.logs-grid { grid-template-columns: 1fr; }
 	}
 </style>
 	</head>
