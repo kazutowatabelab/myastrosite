@@ -1,7 +1,8 @@
 ---
 title: "KZ Lab 始動！"
-description: "テスト投稿です"
+description: "テスト投稿"
 pubDate: 2026-01-10
+slug: "first-post"
 ---
 
 # KZ Lab 始動！
