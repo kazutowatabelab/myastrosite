@@ -1,8 +1,7 @@
-----
+---
 title: "KZ Lab 始動！"
-description: "ついに自分の開発ログを公開しました。"
-pubDate: "2026-01-10"
-heroImage: "/blog-placeholder-about.jpg"
+description: "テスト投稿です"
+pubDate: 2026-01-10
 ---
 
 # KZ Lab 始動！
