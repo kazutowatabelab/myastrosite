@@ -7,9 +7,9 @@ import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
+// 記事データを取得し、日付順に並べ替え
 const posts = (await getCollection('blog'))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 3);
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
@@ -44,7 +44,6 @@ const posts = (await getCollection('blog'))
 				padding: 4rem 2rem;
 				background: 
 					linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%);
-				background-size: 100% 100%;
 				text-align: center;
 				overflow: hidden;
 			}
@@ -52,167 +51,31 @@ const posts = (await getCollection('blog'))
 			.hero-section::before {
 				content: '';
 				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
+				top: 0; left: 0; right: 0; bottom: 0;
 				background: 
-					repeating-linear-gradient(
-						0deg,
-						transparent,
-						transparent 2px,
-						rgba(255, 255, 255, 0.02) 2px,
-						rgba(255, 255, 255, 0.02) 4px
-					),
-					repeating-linear-gradient(
-						90deg,
-						transparent,
-						transparent 2px,
-						rgba(255, 255, 255, 0.02) 2px,
-						rgba(255, 255, 255, 0.02) 4px
-					);
+					repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px),
+					repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
 				background-size: 40px 40px;
 				animation: gridMove 20s linear infinite;
 				opacity: 0.5;
 			}
 
 			@keyframes gridMove {
-				0% {
-					transform: translate(0, 0);
-				}
-				100% {
-					transform: translate(40px, 40px);
-				}
+				0% { transform: translate(0, 0); }
+				100% { transform: translate(40px, 40px); }
 			}
 
-			.geometric-shapes {
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				pointer-events: none;
-				overflow: hidden;
-			}
+			.geometric-shapes { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; overflow: hidden; }
+			.shape { position: absolute; opacity: 0.3; }
+			.shape-1 { width: 200px; height: 200px; border: 2px solid #6bb3ff; border-radius: 50%; top: 10%; left: 10%; animation: rotate 30s linear infinite; }
+			.shape-2 { width: 150px; height: 150px; border: 2px solid #6bb3ff; top: 60%; right: 15%; transform: rotate(45deg); animation: rotateReverse 25s linear infinite; }
+			.shape-3 { width: 100px; height: 100px; border: 2px solid #6bb3ff; border-radius: 20%; bottom: 20%; left: 20%; animation: float 15s ease-in-out infinite; }
+			.shape-4 { width: 80px; height: 80px; border: 2px solid #6bb3ff; top: 30%; right: 30%; transform: rotate(30deg); animation: pulse 8s ease-in-out infinite; }
 
-			.shape {
-				position: absolute;
-				opacity: 0.3;
-			}
-
-			.shape-1 {
-				width: 200px;
-				height: 200px;
-				border: 2px solid #6bb3ff;
-				border-radius: 50%;
-				top: 10%;
-				left: 10%;
-				animation: rotate 30s linear infinite;
-			}
-
-			.shape-2 {
-				width: 150px;
-				height: 150px;
-				border: 2px solid #6bb3ff;
-				top: 60%;
-				right: 15%;
-				transform: rotate(45deg);
-				animation: rotateReverse 25s linear infinite;
-			}
-
-			.shape-3 {
-				width: 100px;
-				height: 100px;
-				border: 2px solid #6bb3ff;
-				border-radius: 20%;
-				bottom: 20%;
-				left: 20%;
-				animation: float 15s ease-in-out infinite;
-			}
-
-			.shape-4 {
-				width: 80px;
-				height: 80px;
-				border: 2px solid #6bb3ff;
-				top: 30%;
-				right: 30%;
-				transform: rotate(30deg);
-				animation: pulse 8s ease-in-out infinite;
-			}
-
-			.shape-5 {
-				width: 300px;
-				height: 2px;
-				background: linear-gradient(90deg, transparent, #6bb3ff, transparent);
-				top: 50%;
-				left: -100px;
-				animation: slideRight 12s linear infinite;
-			}
-
-			.shape-6 {
-				width: 2px;
-				height: 300px;
-				background: linear-gradient(180deg, transparent, #6bb3ff, transparent);
-				top: -100px;
-				right: 40%;
-				animation: slideDown 10s linear infinite;
-			}
-
-			@keyframes rotate {
-				0% {
-					transform: rotate(0deg);
-				}
-				100% {
-					transform: rotate(360deg);
-				}
-			}
-
-			@keyframes rotateReverse {
-				0% {
-					transform: rotate(45deg);
-				}
-				100% {
-					transform: rotate(405deg);
-				}
-			}
-
-			@keyframes float {
-				0%, 100% {
-					transform: translateY(0) rotate(0deg);
-				}
-				50% {
-					transform: translateY(-30px) rotate(180deg);
-				}
-			}
-
-			@keyframes pulse {
-				0%, 100% {
-					opacity: 0.3;
-					transform: rotate(30deg) scale(1);
-				}
-				50% {
-					opacity: 0.5;
-					transform: rotate(30deg) scale(1.2);
-				}
-			}
-
-			@keyframes slideRight {
-				0% {
-					left: -100px;
-				}
-				100% {
-					left: calc(100% + 100px);
-				}
-			}
-
-			@keyframes slideDown {
-				0% {
-					top: -100px;
-				}
-				100% {
-					top: calc(100% + 100px);
-				}
-			}
+			@keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+			@keyframes rotateReverse { 0% { transform: rotate(45deg); } 100% { transform: rotate(405deg); } }
+			@keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(180deg); } }
+			@keyframes pulse { 0%, 100% { opacity: 0.3; transform: rotate(30deg) scale(1); } 50% { opacity: 0.5; transform: rotate(30deg) scale(1.2); } }
 
 			.hero-title {
 				font-size: 3.5rem;
@@ -222,251 +85,9 @@ const posts = (await getCollection('blog'))
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 				background-clip: text;
-				letter-spacing: -0.02em;
 				position: relative;
 				z-index: 1;
 			}
 
 			.hero-subtitle {
-				font-size: 1.25rem;
-				color: var(--text-secondary);
-				font-weight: 400;
-				margin: 0;
-				letter-spacing: 0.01em;
-				position: relative;
-				z-index: 1;
-			}
-
-			.content-section {
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 3rem 2rem;
-			}
-
-			.section-title {
-				font-size: 2.5rem;
-				font-weight: 700;
-				margin: 0 0 3rem 0;
-				color: var(--text-primary);
-				letter-spacing: -0.01em;
-			}
-
-			.logs-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-				gap: 2rem;
-				margin-bottom: 6rem;
-			}
-
-			.log-card {
-				background: var(--bg-card);
-				border: 2px solid var(--accent);
-				border-radius: 12px;
-				padding: 2rem;
-				transition: all 0.3s ease;
-				display: flex;
-				flex-direction: column;
-				text-decoration: none;
-				color: inherit;
-				cursor: pointer;
-				box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15);
-			}
-
-			.log-card:hover {
-				transform: translateY(-6px);
-				border-color: var(--accent-hover);
-				box-shadow: 0 12px 32px rgba(74, 158, 255, 0.25);
-			}
-
-			.log-card:visited {
-				color: inherit;
-			}
-
-			.log-card.empty {
-				opacity: 0.5;
-				min-height: 200px;
-				justify-content: center;
-				align-items: center;
-				border: 2px solid var(--border);
-				cursor: default;
-				box-shadow: none;
-			}
-
-			.log-card.empty:hover {
-				transform: none;
-				border-color: var(--border);
-				box-shadow: none;
-			}
-
-			.log-card-image {
-				width: 100%;
-				height: 180px;
-				object-fit: cover;
-				border-radius: 8px;
-				margin-bottom: 1.5rem;
-				background: var(--bg-secondary);
-			}
-
-			.log-card-title {
-				font-size: 1.75rem;
-				font-weight: 700;
-				margin: 0 0 1rem 0;
-				color: var(--text-primary);
-				line-height: 1.3;
-			}
-
-			.log-card-description {
-				font-size: 1rem;
-				color: var(--text-secondary);
-				margin: 0 0 1.25rem 0;
-				line-height: 1.6;
-				display: -webkit-box;
-				-webkit-line-clamp: 3;
-				-webkit-box-orient: vertical;
-				overflow: hidden;
-			}
-
-			.log-card-date {
-				font-size: 0.875rem;
-				color: var(--accent);
-				margin: 0;
-				font-weight: 500;
-			}
-
-			.skills-section {
-				margin-top: 6rem;
-			}
-
-			.skills-badges {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.75rem;
-			}
-
-			.skill-badge {
-				display: inline-block;
-				padding: 0.5rem 1rem;
-				background: var(--bg-card);
-				border: 1px solid var(--border);
-				border-radius: 6px;
-				font-size: 0.9rem;
-				color: var(--text-secondary);
-				transition: all 0.2s ease;
-			}
-
-			.skill-badge:hover {
-				border-color: var(--accent);
-				color: var(--accent);
-				transform: translateY(-2px);
-			}
-
-			@media (max-width: 768px) {
-				.hero-section {
-					min-height: 30vh;
-					padding: 3rem 1.5rem;
-				}
-
-				.hero-title {
-					font-size: 2.5rem;
-				}
-
-				.hero-subtitle {
-					font-size: 1.1rem;
-				}
-
-				.content-section {
-					padding: 2rem 1.5rem;
-				}
-
-				.logs-grid {
-					grid-template-columns: 1fr;
-					gap: 1.5rem;
-				}
-
-				.log-card-title {
-					font-size: 1.5rem;
-				}
-
-				.log-card-description {
-					font-size: 0.95rem;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="hero-section">
-				<div class="geometric-shapes">
-					<div class="shape shape-1"></div>
-					<div class="shape shape-2"></div>
-					<div class="shape shape-3"></div>
-					<div class="shape shape-4"></div>
-					<div class="shape shape-5"></div>
-					<div class="shape shape-6"></div>
-				</div>
-				<h1 class="hero-title">KZ Lab</h1>
-				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
-			</section>
-
-			<section class="content-section">
-				<h2 class="section-title">Latest Logs</h2>
-				<div class="logs-grid">
-					<a href="/posts/first-post" class="log-card">
-						<h3 class="log-card-title">KZ Lab 始動！</h3>
-						<p class="log-card-description">ついに自分の開発ログを公開しました。</p>
-						<p class="log-card-date">
-							<FormattedDate date={new Date('2026-01-10')} />
-						</p>
-					</a>
-					{posts.length > 0 ? (
-						posts.map((post) => (
-							<a href={`/blog/${post.id}/`} class="log-card">
-								{post.data.heroImage && (
-									<Image
-										class="log-card-image"
-										src={post.data.heroImage}
-										alt={post.data.title}
-										width={400}
-										height={180}
-									/>
-								)}
-								<h3 class="log-card-title">{post.data.title}</h3>
-								<p class="log-card-description">{post.data.description}</p>
-								<p class="log-card-date">
-									<FormattedDate date={post.data.pubDate} />
-								</p>
-							</a>
-						))
-					) : (
-						<>
-							<div class="log-card empty">
-								<p style="color: var(--text-secondary);">Coming soon...</p>
-							</div>
-							<div class="log-card empty">
-								<p style="color: var(--text-secondary);">Coming soon...</p>
-							</div>
-							<div class="log-card empty">
-								<p style="color: var(--text-secondary);">Coming soon...</p>
-							</div>
-						</>
-					)}
-				</div>
-
-				<div class="skills-section">
-					<h2 class="section-title">Skills</h2>
-					<div class="skills-badges">
-						<span class="skill-badge">Unity</span>
-						<span class="skill-badge">C#</span>
-						<span class="skill-badge">Astro</span>
-						<span class="skill-badge">Cursor</span>
-						<span class="skill-badge">Python</span>
-						<span class="skill-badge">AI</span>
-						<span class="skill-badge">Game Development</span>
-					</div>
-				</div>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+				font-size:
