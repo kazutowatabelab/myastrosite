@@ -1,13 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+// ... 他のインポート ...
 
 const posts = (await getCollection('blog'))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	/* ↓ ここにこれを書き足します */
+	.slice(0, 3); 
 ---
 
 <!doctype html>
@@ -29,12 +26,20 @@ const posts = (await getCollection('blog'))
 			.hero {
 				text-align: center;
 				padding: 4rem 0;
-			}
 			.logs-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-				gap: 2rem;
-			}
+    display: grid;
+    /* ↓ ここを 1fr 1fr 1fr に書き換え */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 2rem;
+    margin-bottom: 6rem;
+}
+
+/* スマホ表示の時は1枚ずつにする設定（もしあれば） */
+@media (max-width: 768px) {
+    .logs-grid {
+        grid-template-columns: 1fr;
+    }
+}
 			.log-card {
 				background: #1a1a24;
 				border: 2px solid #4a9eff;
