@@ -149,14 +149,12 @@ const posts = allPosts
 				font-weight: 500;
 			}
 
-			.hero-section .geom-animations {
 	pointer-events: none;
 	position: absolute;
 	inset: 0;
 	z-index: 0;
 	overflow: hidden;
 }
-.hero-section .circle {
 	position: absolute; left:10%; top:15%;
 	width: 120px; height: 120px;
 	border-radius: 50%;
@@ -165,7 +163,6 @@ const posts = allPosts
 	animation: geo-circ 10s linear infinite alternate;
 }
 @keyframes geo-circ { to { transform: translateY(30px) scale(1.1) rotate(70deg); } }
-.hero-section .triangle {
 	position: absolute; right:8%; top:35%;
 	width: 0; height: 0;
 	border-left: 50px solid transparent;
@@ -175,7 +172,6 @@ const posts = allPosts
 	animation: geo-tri 13s linear infinite alternate;
 }
 @keyframes geo-tri { to { transform: translateX(-30px) scale(1.05) rotate(-45deg); } }
-.hero-section .rect {
 	position: absolute; left:30%; bottom:10%;
 	width: 80px; height: 80px;
 	border: 2.5px solid #56c9fe; border-radius: 12px;
@@ -195,11 +191,6 @@ const posts = allPosts
 		<Header />
 		<main>
 			<section class="hero-section">
-				<div class="geom-animations">
-					<div class="circle"></div>
-					<div class="triangle"></div>
-					<div class="rect"></div>
-				</div>
 				<h1 class="hero-title">KZ Lab</h1>
 				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
 			</section>
