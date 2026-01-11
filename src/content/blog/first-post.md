@@ -1,7 +1,7 @@
 ---
 title: "KZ Lab 始動！"
 description: "テスト投稿"
-pubDate: 2026-01-10
+pubDate: 2026-01-11
 ---
 
 # KZ Lab 始動！
