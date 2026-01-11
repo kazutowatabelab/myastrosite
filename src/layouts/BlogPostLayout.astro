@@ -1,5 +1,11 @@
 ---
+interface Props {
+	title: string;
+	pubDate: string | Date;
+}
+
 const { title, pubDate } = Astro.props;
+const publishedDate = typeof pubDate === 'string' ? new Date(pubDate) : pubDate;
 ---
 <!DOCTYPE html>
 <html lang="ja">
@@ -54,7 +60,7 @@ const { title, pubDate } = Astro.props;
   <body>
     <main class="article">
       <h1>{title}</h1>
-      <div class="meta">公開日: {pubDate}</div>
+      <div class="meta">公開日: {publishedDate.toLocaleDateString('ja-JP')}</div>
       <hr />
       <slot />
     </main>

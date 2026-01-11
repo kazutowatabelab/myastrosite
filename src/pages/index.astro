@@ -1,15 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
+import { getBlogs } from '../lib/microcms';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const allPosts = await getCollection('blog');
-const posts = allPosts
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 3);
+const allPosts = await getBlogs();
+const posts = allPosts.slice(0, 3);
 ---
 
 <!doctype html>
@@ -201,10 +199,10 @@ const posts = allPosts
 					{posts.length > 0 ? (
 						posts.map((post) => (
 							<a href={`/blog/${post.id}/`} class="log-card">
-								<h3 class="log-card-title">{post.data.title}</h3>
-								<p class="log-card-description">{post.data.description}</p>
+								<h3 class="log-card-title">{post.title}</h3>
+								<p class="log-card-description">{post.description}</p>
 								<p class="log-card-date">
-									<FormattedDate date={post.data.pubDate} />
+									<FormattedDate date={new Date(post.publishedAt)} />
 								</p>
 							</a>
 						))
