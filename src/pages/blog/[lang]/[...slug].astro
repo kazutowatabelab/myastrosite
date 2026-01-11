@@ -1,0 +1,13 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getBlogs, getBlogDetail } from '../../../lib/microcms';
+
+export async function getStaticPaths() {
+  const response = await getBlogs();
+  return response.flatMap((content) => [
+    { params: { lang: 'jp', slug: content.id }, props: { content, lang: 'jp' } },
+    { params: { lang: 'en', slug: content.id }, props: { content, lang: 'en' } },
+  ]);
+}
+// ...以下表示ロジック
+---
