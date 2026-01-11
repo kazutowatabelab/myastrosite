@@ -1,1 +1,62 @@
--
+---
+const { title, pubDate } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        background: #1a1a1a;
+        color: #fff;
+        padding: 40px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      }
+      .article {
+        max-width: 720px;
+        margin: 0 auto;
+        background: #22232b;
+        border-radius: 14px;
+        box-shadow: 0 4px 32px rgba(0,0,0,0.13);
+        padding: 3rem 2rem;
+      }
+      .article h1 {
+        font-size: 2.3rem;
+        font-weight: bold;
+        margin: 0 0 0.7em 0;
+      }
+      .article .meta {
+        color: #7ac9f9;
+        font-size: 1.08em;
+        margin-bottom: 2.1em;
+      }
+      .article hr {
+        border: none;
+        border-top: 1px solid #333;
+        margin: 2em 0;
+      }
+      .article :global(h2) {
+        margin-top: 2em;
+        color: #61dafb;
+      }
+      .article :global(a) {
+        color: #93edff;
+        text-decoration: underline;
+      }
+      .article :global(p) {
+        margin-bottom: 1.3em;
+      }
+
+    </style>
+  </head>
+  <body>
+    <main class="article">
+      <h1>{title}</h1>
+      <div class="meta">公開日: {pubDate}</div>
+      <hr />
+      <slot />
+    </main>
+  </body>
+</html>
