@@ -1,5 +1,5 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import Layout from '../../../layouts/BlogPostLayout.astro';
 import { getBlogs, getBlogDetail } from '../../../lib/microcms';
 
 export async function getStaticPaths() {
@@ -9,5 +9,18 @@ export async function getStaticPaths() {
     { params: { lang: 'en', slug: content.id }, props: { content, lang: 'en' } },
   ]);
 }
-// ...以下表示ロジック
+
+const { content, lang } = Astro.props;
+const isEn = lang === 'en';
+
+// データの優先順位：英語モードなら英語、なければ日本語
+const displayTitle = (isEn && content.title_en) ? content.title_en : content.title;
+const displayContent = (isEn && content.content_en) ? content.content_en : content.content;
 ---
+
+<Layout title={displayTitle} {...content}>
+  <article>
+    <h1>{displayTitle}</h1>
+    <div set:html={displayContent} />
+  </article>
+</Layout>

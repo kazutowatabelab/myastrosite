@@ -1,17 +1,24 @@
 ---
 interface Props {
-	date: Date;
+	date: Date | string | undefined; // undefinedを許容
 }
 
 const { date } = Astro.props;
+
+// dateが存在し、かつ有効な日付かチェックする
+const isValidDate = date && !isNaN(new Date(date).getTime());
 ---
 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
-	}
-</time>
+{isValidDate ? (
+	<time datetime={new Date(date).toISOString()}>
+		{
+			new Date(date).toLocaleDateString('ja-jp', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+			})
+		}
+	</time>
+) : (
+	<span>日付未設定</span>
+)}
