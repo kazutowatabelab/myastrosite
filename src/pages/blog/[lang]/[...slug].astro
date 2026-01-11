@@ -1,0 +1,52 @@
+---
+import { getBlogs, type Blog } from '../../../lib/microcms';
+import BlogPostLayout from '../../../layouts/BlogPostLayout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getBlogs();
+	const paths: Array<{ params: { lang: string; slug: string }; props: { post: Blog; lang: string } }> = [];
+
+	posts.forEach((post) => {
+		// 日本語版のパス
+		paths.push({
+			params: { lang: 'jp', slug: post.id },
+			props: { post, lang: 'jp' },
+		});
+
+		// 英語版のパス
+		paths.push({
+			params: { lang: 'en', slug: post.id },
+			props: { post, lang: 'en' },
+		});
+	});
+
+	return paths;
+}
+
+interface Props {
+	post: Blog;
+	lang: string;
+}
+
+const { post, lang } = Astro.props;
+
+if (!post) {
+	return Astro.redirect('/404');
+}
+
+// 言語に応じたタイトルとコンテンツを取得（フォールバック付き）
+const displayTitle = lang === 'en' 
+	? (post.title_en || post.title)
+	: post.title;
+
+const displayContent = lang === 'en'
+	? (post.content_en || post.content)
+	: post.content;
+
+const htmlLang = lang === 'en' ? 'en' : 'ja';
+---
+
+<BlogPostLayout title={displayTitle} pubDate={post.publishedAt} lang={htmlLang} postId={post.id}>
+	<div set:html={displayContent} />
+</BlogPostLayout>
+

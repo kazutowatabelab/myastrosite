@@ -1,76 +1,73 @@
 import { createClient } from 'microcms-js-sdk';
 
-// microCMSクライアントの初期化
 export const client = createClient({
-	serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN || '',
-	apiKey: import.meta.env.MICROCMS_API_KEY || '',
+    serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN || '',
+    apiKey: import.meta.env.MICROCMS_API_KEY || '',
 });
 
-// ブログ記事の型定義
+// ブログ記事の型定義（英語フィールドを追加）
 export interface Blog {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	publishedAt: string;
-	revisedAt: string;
-	title: string;
-	description: string;
-	content: string;
-	eyecatch?: {
-		url: string;
-		width: number;
-		height: number;
-	};
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    revisedAt: string;
+    title: string;
+    title_en?: string;        // 追加
+    description: string;
+    description_en?: string;  // 追加
+    content: string;
+    content_en?: string;      // 追加
+    eyecatch?: {
+        url: string;
+        width: number;
+        height: number;
+    };
 }
 
-// ブログ記事一覧を取得する関数
+// 共通の取得クエリ（エンドポイント名を共通化しておくと保守が楽です）
+const ENDPOINT = 'ma-japan';
+
 export async function getBlogs(limit?: number): Promise<Blog[]> {
-	try {
-		const response = await client.get({
-			endpoint: 'ma-japan',
-			queries: {
-				limit: limit || 100,
-				orders: '-publishedAt',
-			},
-		});
-
-		return response.contents as Blog[];
-	} catch (error) {
-		console.error('Failed to fetch blogs from microCMS:', error);
-		return [];
-	}
+    try {
+        const response = await client.get({
+            endpoint: ENDPOINT,
+            queries: {
+                limit: limit || 100,
+                orders: '-publishedAt',
+            },
+        });
+        return response.contents as Blog[];
+    } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+        return [];
+    }
 }
 
-// ブログ記事詳細を取得する関数
 export async function getBlogDetail(contentId: string): Promise<Blog | null> {
-	try {
-		const response = await client.get({
-			endpoint: 'ma-japan',
-			contentId,
-		});
-
-		return response as Blog;
-	} catch (error) {
-		console.error(`Failed to fetch blog detail (${contentId}) from microCMS:`, error);
-		return null;
-	}
+    try {
+        const response = await client.get({
+            endpoint: ENDPOINT,
+            contentId,
+        });
+        return response as Blog;
+    } catch (error) {
+        console.error(`Failed to fetch blog detail (${contentId}):`, error);
+        return null;
+    }
 }
 
-// すべてのブログ記事IDを取得する関数（getStaticPaths用）
+// getStaticPaths用の全ID取得
 export async function getAllBlogIds(): Promise<string[]> {
-	try {
-		const response = await client.get({
-			endpoint: 'ma-japan',
-			queries: {
-				fields: 'id',
-				limit: 1000,
-			},
-		});
-
-		return response.contents.map((content: { id: string }) => content.id);
-	} catch (error) {
-		console.error('Failed to fetch blog IDs from microCMS:', error);
-		return [];
-	}
+    try {
+        const response = await client.get({
+            endpoint: ENDPOINT,
+            queries: { fields: 'id', limit: 1000 },
+        });
+        return response.contents.map((content: { id: string }) => content.id);
+    } catch (error) {
+        console.error('Failed to fetch blog IDs:', error);
+        return [];
+    }
 }
 

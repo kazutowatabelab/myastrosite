@@ -2,13 +2,27 @@
 interface Props {
 	title: string;
 	pubDate: string | Date;
+	lang?: string;
+	postId?: string;
 }
 
-const { title, pubDate } = Astro.props;
+const { title, pubDate, lang = 'ja', postId } = Astro.props;
 const publishedDate = typeof pubDate === 'string' ? new Date(pubDate) : pubDate;
+const htmlLang = lang || 'ja';
+
+// 言語切り替えリンクの生成
+let langSwitchLink: string | null = null;
+let langSwitchLabel: string = '';
+
+if (postId) {
+	const currentLang = lang === 'en' ? 'en' : 'jp';
+	const targetLang = currentLang === 'en' ? 'jp' : 'en';
+	langSwitchLink = `/blog/${targetLang}/${postId}/`;
+	langSwitchLabel = currentLang === 'en' ? '日本語版' : 'English';
+}
 ---
 <!DOCTYPE html>
-<html lang="ja">
+<html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <title>{title}</title>
@@ -55,12 +69,48 @@ const publishedDate = typeof pubDate === 'string' ? new Date(pubDate) : pubDate;
         margin-bottom: 1.3em;
       }
 
+      .lang-switcher {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2em;
+        padding-bottom: 1em;
+        border-bottom: 1px solid #333;
+      }
+
+      .lang-switcher a {
+        color: #7ac9f9;
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #444;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+      }
+
+      .lang-switcher a:hover {
+        background: #333;
+        border-color: #7ac9f9;
+        color: #93edff;
+      }
+
     </style>
   </head>
   <body>
     <main class="article">
+      {langSwitchLink && (
+        <div class="lang-switcher">
+          <span>{htmlLang === 'en' ? 'Language:' : '言語:'}</span>
+          <a href={langSwitchLink}>{langSwitchLabel}</a>
+        </div>
+      )}
       <h1>{title}</h1>
-      <div class="meta">公開日: {publishedDate.toLocaleDateString('ja-JP')}</div>
+      <div class="meta">
+		{htmlLang === 'en' 
+			? `Published: ${publishedDate.toLocaleDateString('en-US')}`
+			: `公開日: ${publishedDate.toLocaleDateString('ja-JP')}`
+		}
+	  </div>
       <hr />
       <slot />
     </main>

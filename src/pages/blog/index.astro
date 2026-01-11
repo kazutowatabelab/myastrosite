@@ -7,6 +7,9 @@ import BaseHead from '../../components/BaseHead.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = await getBlogs();
+
+// 現在のURLから言語を判定（/blog/en/で始まる場合は英語、それ以外は日本語）
+const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
 ---
 
 <!doctype html>
@@ -115,7 +118,7 @@ const posts = await getBlogs();
 					{posts.length > 0 ? (
 						posts.map((post) => (
 							<li>
-								<a href={`/blog/${post.id}/`}>
+								<a href={`/blog/${currentLang}/${post.id}`}>
 									<span class="date">
 										<FormattedDate date={new Date(post.publishedAt)} />
 									</span>
