@@ -1,74 +1,69 @@
 ---
-import Layout from './BlogPost.astro'; 
+// src/layouts/BlogPostLayout.astro
+import BlogPost from './BlogPost.astro';
 
-const {  
-  title,  
-  description,  
-  publishedAt,  
-  updatedAt,  
-  eyecatch,  
-  content, 
-  lang = 'jp'
-} = Astro.props;
+const { content, lang = 'jp', ...props } = Astro.props;
 
-// 日付の取得先を統一
-const rawDate = publishedAt || content?.publishedAt;
 const isEn = lang === 'en';
-const displayTitle = (isEn && content?.title_en) ? content.title_en : (title || content?.title);
 
-// 言語切り替え用のURLを作成
-const { pathname } = Astro.url;
-const currentPathWithoutLang = pathname.replace(/^\/(jp|en)/, '');
-const jpPath = `/blog/jp${currentPathWithoutLang.replace('/blog/jp', '').replace('/blog/en', '')}`;
-const enPath = `/blog/en${currentPathWithoutLang.replace('/blog/jp', '').replace('/blog/en', '')}`;
+// 修正ポイント：英語タイトルがない場合は日本語タイトルを、それもなければ空文字ではなく"Untitled"を返す
+const title = isEn 
+  ? (content?.title_en || content?.title || props.title || "Untitled") 
+  : (content?.title || props.title || "無題");
+
+const pubDate = content?.publishedAt || props.pubDate;
+const heroImage = content?.eyecatch?.url || props.heroImage;
+
+const currentSlug = content?.id || '';
+const jpPath = `/blog/jp/${currentSlug}`;
+const enPath = `/blog/en/${currentSlug}`;
 ---
 
-<Layout title={displayTitle} description={description || content?.description} pubDate={rawDate} lang={lang}>
-  <main class="container">
-    <div class="lang-switcher">
-      <a href={jpPath} class={lang === 'jp' ? 'active' : ''}>日本語</a>
-      <span>/</span>
-      <a href={enPath} class={lang === 'en' ? 'active' : ''}>English</a>
-    </div>
-
-    <article class="blog-post">
-      {eyecatch && (
-        <img src={eyecatch.url} width={eyecatch.width} height={eyecatch.height} alt={displayTitle} class="eyecatch" />
-      )}
-      
-      <header class="header">
-        <h1 class="title">{displayTitle}</h1>
-      </header>
-
-      <div class="content">
-        <slot />
-      </div>
-    </article>
-  </main>
-</Layout>
+<BlogPost title={title} pubDate={pubDate} heroImage={heroImage} {...props}>
+  <div class="lang-switch">
+    <a href={jpPath} class={lang === 'jp' ? 'active' : ''}>日本語</a>
+    <span>/</span>
+    <a href={enPath} class={lang === 'en' ? 'active' : ''}>English</a>
+  </div>
+  
+  <slot />
+</BlogPost>
 
 <style>
-  .lang-switcher {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 1rem;
+  /* 言語切り替えボタン */
+  .lang-switch {
+    text-align: right;
+    margin-bottom: 2rem;
     font-size: 0.9rem;
   }
-  .lang-switcher a {
+  .lang-switch a {
     text-decoration: none;
     color: #888;
   }
-  .lang-switcher a.active {
-    color: #000;
+  .lang-switch a.active {
     font-weight: bold;
+    color: #000;
     text-decoration: underline;
   }
-  /* 以下、既存のスタイル */
-  .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
-  .blog-post { display: flex; flex-direction: column; gap: 2rem; }
-  .eyecatch { width: 100%; height: auto; border-radius: 8px; object-fit: cover; }
-  .header { border-bottom: 1px solid #eee; padding-bottom: 1rem; }
-  .title { font-size: 2.5rem; margin: 0; }
-  .content { line-height: 1.8; }
+
+  /* アイキャッチ画像の強制上書き
+     !important を付与して元のテンプレートのスタイルに勝ちます
+  */
+  :global(.hero-image) {
+    width: 100% !important;
+    max-width: none !important; /* 親の幅制限を一度リセット */
+    display: flex !important;
+    justify-content: flex-start !important; /* 左寄せ */
+    margin: 0 0 2rem 0 !important;
+  }
+
+  :global(.hero-image img) {
+    max-width: 600px !important; /* ここでサイズを制限 */
+    width: 100% !important;      /* スマホでは画面に収まるように */
+    height: auto !important;
+    margin-left: 0 !important;   /* 強制左寄せ */
+    margin-right: auto !important;
+    border-radius: 8px;
+    object-fit: contain !important;
+  }
 </style>

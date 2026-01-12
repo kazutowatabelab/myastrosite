@@ -1,0 +1,23 @@
+---
+// src/pages/blog/jp.astro (日本語記事一覧)
+import Layout from '../../layouts/BlogPost.astro';
+import { getBlogs } from '../../lib/microcms';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const response = await getBlogs();
+---
+<Layout title="ブログ一覧">
+	<section>
+		<ul>
+			{response.map((post) => (
+				<li>
+					<a href={`/blog/jp/${post.id}/`}>
+						<img width={720} height={360} src={post.eyecatch?.url} alt="" />
+						<h4 class="title">{post.title}</h4>
+						<p class="date"><FormattedDate date={post.publishedAt} /></p>
+					</a>
+				</li>
+			))}
+		</ul>
+	</section>
+</Layout>
