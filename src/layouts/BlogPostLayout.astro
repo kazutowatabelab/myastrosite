@@ -48,22 +48,23 @@ const enPath = `/blog/en/${currentSlug}`;
 
   /* アイキャッチ画像の強制上書き
      !important を付与して元のテンプレートのスタイルに勝ちます
+     8分の1のサイズで左寄せ
   */
-  :global(.hero-image) {
-    width: 100% !important;
-    max-width: none !important; /* 親の幅制限を一度リセット */
+  :global(.hero-image-container) {
+    width: auto !important;
+    max-width: none !important;
     display: flex !important;
     justify-content: flex-start !important; /* 左寄せ */
     margin: 0 0 2rem 0 !important;
   }
 
-  :global(.hero-image img) {
-    max-width: 600px !important; /* ここでサイズを制限 */
-    width: 100% !important;      /* スマホでは画面に収まるように */
+  :global(.hero-image-container img) {
+    width: 150px !important;      /* 元の1200pxの8分の1 */
+    max-width: 150px !important;
     height: auto !important;
     margin-left: 0 !important;   /* 強制左寄せ */
     margin-right: auto !important;
     border-radius: 8px;
-    object-fit: contain !important;
+    object-fit: cover !important;
   }
 </style>

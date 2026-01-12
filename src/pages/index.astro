@@ -204,17 +204,20 @@ const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
 			}
 
 			.log-card-image {
-				width: 100%;
-				height: 200px;
+				width: 150px;
+				height: auto;
+				max-height: 75px;
 				object-fit: cover;
 				border-radius: 8px;
 				margin-bottom: 1.5rem;
 				background: var(--bg-secondary);
+				float: left;
+				margin-right: 1rem;
 			}
 
 			.log-card-image-placeholder {
-				width: 100%;
-				height: 200px;
+				width: 150px;
+				height: 75px;
 				background: var(--bg-secondary);
 				border-radius: 8px;
 				margin-bottom: 1.5rem;
@@ -223,6 +226,8 @@ const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
 				justify-content: center;
 				color: var(--text-secondary);
 				border: 2px dashed var(--border);
+				float: left;
+				margin-right: 1rem;
 			}
 
 			.log-card-image-placeholder svg {

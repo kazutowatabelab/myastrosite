@@ -12,7 +12,15 @@ const response = await getBlogs();
 			{response.map((post) => (
 				<li>
 					<a href={`/blog/jp/${post.id}/`}>
-						<img width={720} height={360} src={post.eyecatch?.url} alt="" />
+						{post.eyecatch && (
+							<img 
+								class="eyecatch-thumbnail" 
+								width={90} 
+								height={45} 
+								src={post.eyecatch.url} 
+								alt="" 
+							/>
+						)}
 						<h4 class="title">{post.title}</h4>
 						<p class="date"><FormattedDate date={post.publishedAt} /></p>
 					</a>
@@ -20,4 +28,14 @@ const response = await getBlogs();
 			))}
 		</ul>
 	</section>
+	<style>
+		.eyecatch-thumbnail {
+			width: 90px;
+			height: auto;
+			object-fit: cover;
+			border-radius: 8px;
+			margin-right: 1rem;
+			float: left;
+		}
+	</style>
 </Layout>

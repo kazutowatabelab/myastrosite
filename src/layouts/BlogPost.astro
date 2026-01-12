@@ -52,18 +52,21 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 
 			.hero-image-container {
-				width: 100%;
+				width: auto;
 				margin-bottom: 2.5rem;
 				border-radius: 12px;
 				overflow: hidden;
 				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+				display: flex;
+				justify-content: flex-start;
 			}
 
 			.hero-image-container img {
 				display: block;
-				width: 100%;
+				width: 150px;
 				height: auto;
 				object-fit: cover;
+				max-width: 12.5%;
 			}
 
 			.article-title {
@@ -231,7 +234,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				<header class="article-header">
 					{heroImage && (
 						<div class="hero-image-container">
-							<Image width={1200} height={600} src={heroImage} alt={title} />
+							<Image width={150} height={75} src={heroImage} alt={title} />
 						</div>
 					)}
 					<h1 class="article-title">{title}</h1>
