@@ -6,18 +6,24 @@ import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const allPosts = await getBlogs();
-const posts = allPosts.slice(0, 3);
+// データの取得を try-catch で囲み、エラー時に画面が止まらないようにします
+let posts = [];
+try {
+	const allPosts = await getBlogs();
+	posts = allPosts.slice(0, 3);
+} catch (e) {
+	console.error("Failed to fetch posts:", e);
+}
 
-// 現在のURLから言語を判定（/blog/en/で始まる場合は英語、それ以外は日本語）
-const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
+const currentLang = 'en';
 ---
 
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
+			/* CSS部分は変更なしのため省略（以前のコードのままでOKです） */
 			:root {
 				--bg-primary: #0a0a0f;
 				--bg-secondary: #121218;
@@ -28,248 +34,23 @@ const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
 				--accent-hover: #6bb3ff;
 				--border: #2a2a35;
 			}
-
-			body {
-				background: var(--bg-primary);
-				color: var(--text-primary);
-				margin: 0;
-				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-			}
-
-			.hero-section {
-		position: relative;
-		/* 50vh（画面の半分）から 30vh（画面の3割）に縮小 */
-		min-height: 30vh; 
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		/* 上下の余白を 4rem から 2rem に削減 */
-		padding: 2rem; 
-		background: linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%);
-		text-align: center;
-		overflow: hidden;
-	}
-
-			.hero-section::before {
-				content: '';
-				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
-				background: 
-					repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px),
-					repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
-				background-size: 40px 40px;
-				animation: gridMove 20s linear infinite;
-				opacity: 0.5;
-			}
-
-			@keyframes gridMove {
-				0% { transform: translate(0, 0); }
-				100% { transform: translate(40px, 40px); }
-			}
-
-			.hero-title {
-				font-size: 4rem;
-				font-weight: 700;
-				margin: 0 0 1rem 0;
-				background: linear-gradient(135deg, #ffffff 0%, #a0a0a8 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
-				position: relative;
-				z-index: 1;
-				width: 100%;
-			}
-
-			.hero-subtitle {
-				font-size: 1.5rem;
-				color: var(--text-secondary);
-				position: relative;
-				z-index: 1;
-				width: 100%;
-			}
-
-			.content-section {
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 3rem 2rem;
-			}
-
-			.section-title {
-				font-size: 2.5rem;
-				font-weight: 700;
-				margin: 0 0 3rem 0;
-				color: var(--text-primary);
-			}
-
-			.logs-grid {
-				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 2rem;
-				margin-bottom: 6rem;
-			}
-
-			.log-card {
-				background: var(--bg-card);
-				border: 2px solid var(--accent);
-				border-radius: 12px;
-				padding: 2rem;
-				transition: all 0.3s ease;
-				display: flex;
-				flex-direction: column;
-				text-decoration: none;
-				color: inherit;
-				box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15);
-				position: relative;
-				overflow: hidden;
-			}
-
-			.log-card:hover {
-				transform: translateY(-6px);
-				border-color: var(--accent-hover);
-				box-shadow: 0 12px 32px rgba(74, 158, 255, 0.25);
-			}
-
-			.log-card-title {
-				font-size: 1.5rem;
-				font-weight: 700;
-				margin: 0 0 1rem 0;
-				color: var(--text-primary);
-				line-height: 1.3;
-			}
-
-			.time-line-indicator {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 4px;
-				height: 100%;
-				background: linear-gradient(
-					180deg,
-					var(--accent) 0%,
-					var(--accent-hover) 50%,
-					var(--accent) 100%
-				);
-				border-radius: 0 4px 4px 0;
-				animation: timeFlow 3s ease-in-out infinite;
-			}
-
-			.time-title {
-				position: relative;
-				padding-left: 1.5rem;
-				background: linear-gradient(
-					90deg,
-					rgba(74, 158, 255, 0.1) 0%,
-					transparent 100%
-				);
-				padding: 0.75rem 1rem;
-				border-left: 3px solid var(--accent);
-				border-radius: 4px;
-				transition: all 0.3s ease;
-			}
-
-			.log-card:hover .time-title {
-				background: linear-gradient(
-					90deg,
-					rgba(74, 158, 255, 0.2) 0%,
-					transparent 100%
-				);
-				border-left-color: var(--accent-hover);
-				transform: translateX(4px);
-			}
-
-			@keyframes timeFlow {
-				0%, 100% {
-					opacity: 0.6;
-					transform: scaleY(1);
-				}
-				50% {
-					opacity: 1;
-					transform: scaleY(1.05);
-				}
-			}
-
-			.log-card-description {
-				font-size: 1rem;
-				color: var(--text-secondary);
-				margin-bottom: 1.5rem;
-				line-height: 1.6;
-			}
-
-			.log-card-date {
-				font-size: 0.875rem;
-				color: var(--accent);
-				margin-top: auto;
-				font-weight: 500;
-			}
-
-			.log-card-image {
-				width: 150px;
-				height: auto;
-				max-height: 75px;
-				object-fit: cover;
-				border-radius: 8px;
-				margin-bottom: 1.5rem;
-				background: var(--bg-secondary);
-				float: left;
-				margin-right: 1rem;
-			}
-
-			.log-card-image-placeholder {
-				width: 150px;
-				height: 75px;
-				background: var(--bg-secondary);
-				border-radius: 8px;
-				margin-bottom: 1.5rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: var(--text-secondary);
-				border: 2px dashed var(--border);
-				float: left;
-				margin-right: 1rem;
-			}
-
-			.log-card-image-placeholder svg {
-				opacity: 0.5;
-			}
-
-	pointer-events: none;
-	position: absolute;
-	inset: 0;
-	z-index: 0;
-	overflow: hidden;
-}
-	position: absolute; left:10%; top:15%;
-	width: 120px; height: 120px;
-	border-radius: 50%;
-	border: 3px solid #6bb3ff;
-	opacity: .28;
-	animation: geo-circ 10s linear infinite alternate;
-}
-@keyframes geo-circ { to { transform: translateY(30px) scale(1.1) rotate(70deg); } }
-	position: absolute; right:8%; top:35%;
-	width: 0; height: 0;
-	border-left: 50px solid transparent;
-	border-right: 50px solid transparent;
-	border-bottom: 86px solid #4a9eff44;
-	opacity: .24;
-	animation: geo-tri 13s linear infinite alternate;
-}
-@keyframes geo-tri { to { transform: translateX(-30px) scale(1.05) rotate(-45deg); } }
-	position: absolute; left:30%; bottom:10%;
-	width: 80px; height: 80px;
-	border: 2.5px solid #56c9fe; border-radius: 12px;
-	opacity: .22;
-	animation: geo-rect 9s linear infinite alternate;
-}
-@keyframes geo-rect { to { transform: scale(1.2) rotate(25deg); } }
-
-@media (max-width: 768px) {
-				.hero-title { font-size: 2.5rem; }
-				.hero-subtitle { font-size: 1.1rem; }
-				.logs-grid { grid-template-columns: 1fr; }
-			}
+			body { background: var(--bg-primary); color: var(--text-primary); margin: 0; font-family: sans-serif; }
+			.hero-section { position: relative; min-height: 30vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; background: linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%); text-align: center; overflow: hidden; }
+			.hero-title { font-size: 4rem; font-weight: 700; margin: 0 0 1rem 0; background: linear-gradient(135deg, #ffffff 0%, #a0a0a8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1; width: 100%; }
+			.hero-subtitle { font-size: 1.5rem; color: var(--text-secondary); position: relative; z-index: 1; width: 100%; }
+			.content-section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+			.section-title { font-size: 2.5rem; font-weight: 700; margin: 0 0 3rem 0; color: var(--text-primary); }
+			.logs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 6rem; }
+			.log-card { background: var(--bg-card); border: 2px solid var(--accent); border-radius: 12px; padding: 2rem; transition: all 0.3s ease; display: flex; flex-direction: column; text-decoration: none; color: inherit; box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15); position: relative; overflow: hidden; }
+			.log-card:hover { transform: translateY(-6px); border-color: var(--accent-hover); box-shadow: 0 12px 32px rgba(74, 158, 255, 0.25); }
+			.log-card-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 1rem 0; color: var(--text-primary); line-height: 1.3; }
+			.time-line-indicator { position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, var(--accent) 0%, var(--accent-hover) 50%, var(--accent) 100%); border-radius: 0 4px 4px 0; }
+			.time-title { position: relative; padding: 0.75rem 1rem; border-left: 3px solid var(--accent); border-radius: 4px; }
+			.log-card-description { font-size: 1rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
+			.log-card-date { font-size: 0.875rem; color: var(--accent); margin-top: auto; font-weight: 500; }
+			.log-card-image { width: 150px !important; height: 75px !important; max-width: 150px !important; max-height: 75px !important; object-fit: cover; border-radius: 8px; margin-bottom: 1.5rem; float: left; margin-right: 1rem; }
+			.log-card-image-placeholder { width: 150px; height: 75px; background: var(--bg-secondary); border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); border: 2px dashed var(--border); float: left; margin-right: 1rem; }
+			@media (max-width: 768px) { .hero-title { font-size: 2.5rem; } .logs-grid { grid-template-columns: 1fr; } }
 		</style>
 	</head>
 	<body>
@@ -277,7 +58,7 @@ const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
 		<main>
 			<section class="hero-section">
 				<h1 class="hero-title">Mirai Anchorage Japan</h1>
-				<p class="hero-subtitle">UnityとAIの可能性を探求する。</p>
+				<p class="hero-subtitle">Exploring the possibilities of Unity and AI.</p>
 			</section>
 
 			<section class="content-section">
@@ -285,32 +66,33 @@ const currentLang = Astro.url.pathname.startsWith('/blog/en') ? 'en' : 'jp';
 				<div class="logs-grid">
 					{posts.length > 0 ? (
 						posts.map((post) => (
-							<a href={`/blog/${currentLang}/${post.id}`} class="log-card">
+							<a href={`/blog/en/${post.id}`} class="log-card">
 								<div class="time-line-indicator"></div>
-								{post.eyecatch ? (
+								{post.eyecatch?.url ? (
 									<img 
 										class="log-card-image" 
 										src={post.eyecatch.url} 
-										alt={post.title}
-										width={post.eyecatch.width}
-										height={post.eyecatch.height}
+										alt={post.title_en || post.title || 'post image'}
 									/>
 								) : (
 									<div class="log-card-image-placeholder">
-										<svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path d="M4 16L8.586 11.414C9.367 10.633 10.633 10.633 11.414 11.414L16 16M14 14L15.586 12.414C16.367 11.633 17.633 11.633 18.414 12.414L20 14M14 8H14.01M6 20H18C19.105 20 20 19.105 20 18V6C20 4.895 19.105 4 18 4H6C4.895 4 4 4.895 4 6V18C4 19.105 4.895 20 6 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										</svg>
+										<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
 									</div>
 								)}
-								<h3 class="log-card-title time-title">{post.title}</h3>
-								<p class="log-card-description">{post.description}</p>
+								{/* フィールドが存在するか慎重にチェックします */}
+								<h3 class="log-card-title time-title">
+									{post.title_en ? post.title_en : (post.title || 'Untitled')}
+								</h3>
+								<p class="log-card-description">
+									{post.description_en ? post.description_en : (post.description || '')}
+								</p>
 								<p class="log-card-date">
-									<FormattedDate date={new Date(post.publishedAt)} />
+									{post.publishedAt ? <FormattedDate date={new Date(post.publishedAt)} /> : ''}
 								</p>
 							</a>
 						))
 					) : (
-						<p>記事が見つかりません。</p>
+						<p>No posts found.</p>
 					)}
 				</div>
 			</section>

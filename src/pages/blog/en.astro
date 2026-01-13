@@ -1,0 +1,41 @@
+---
+// src/pages/blog/en.astro (English Blog List)
+import Layout from '../../layouts/BlogPost.astro';
+import { getBlogs } from '../../lib/microcms';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const response = await getBlogs();
+---
+<Layout title="Blog List">
+	<section>
+		<ul>
+			{response.map((post) => (
+				<li>
+					<a href={`/blog/en/${post.id}/`}>
+						{post.eyecatch && (
+							<img 
+								class="eyecatch-thumbnail" 
+								width={90} 
+								height={45} 
+								src={post.eyecatch.url} 
+								alt="" 
+							/>
+						)}
+						<h4 class="title">{post.title_en || post.title}</h4>
+						<p class="date"><FormattedDate date={post.publishedAt} /></p>
+					</a>
+				</li>
+			))}
+		</ul>
+	</section>
+	<style>
+		.eyecatch-thumbnail {
+			width: 90px;
+			height: auto;
+			object-fit: cover;
+			border-radius: 8px;
+			margin-right: 1rem;
+			float: left;
+		}
+	</style>
+</Layout>

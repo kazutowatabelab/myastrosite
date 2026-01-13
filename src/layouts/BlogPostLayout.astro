@@ -1,12 +1,14 @@
 ---
-// src/layouts/BlogPostLayout.astro
+// 1行目にこれが必要です！
 import BlogPost from './BlogPost.astro';
 
-const { content, lang = 'jp', ...props } = Astro.props;
+const { content, lang = 'en', ...props } = Astro.props;
 
 const isEn = lang === 'en';
 
-// 修正ポイント：英語タイトルがない場合は日本語タイトルを、それもなければ空文字ではなく"Untitled"を返す
+// 前回の currentSlug 定義も忘れずに
+const currentSlug = content?.id || props.id || ''; 
+
 const title = isEn 
   ? (content?.title_en || content?.title || props.title || "Untitled") 
   : (content?.title || props.title || "無題");
@@ -14,7 +16,6 @@ const title = isEn
 const pubDate = content?.publishedAt || props.pubDate;
 const heroImage = content?.eyecatch?.url || props.heroImage;
 
-const currentSlug = content?.id || '';
 const jpPath = `/blog/jp/${currentSlug}`;
 const enPath = `/blog/en/${currentSlug}`;
 ---
@@ -30,7 +31,6 @@ const enPath = `/blog/en/${currentSlug}`;
 </BlogPost>
 
 <style>
-  /* 言語切り替えボタン */
   .lang-switch {
     text-align: right;
     margin-bottom: 2rem;
@@ -46,25 +46,21 @@ const enPath = `/blog/en/${currentSlug}`;
     text-decoration: underline;
   }
 
-  /* アイキャッチ画像の強制上書き
-     !important を付与して元のテンプレートのスタイルに勝ちます
-     8分の1のサイズで左寄せ
-  */
-  :global(.hero-image-container) {
-    width: auto !important;
+  :global(.hero-image) {
+    width: 100% !important;
     max-width: none !important;
     display: flex !important;
-    justify-content: flex-start !important; /* 左寄せ */
+    justify-content: flex-start !important;
     margin: 0 0 2rem 0 !important;
   }
 
-  :global(.hero-image-container img) {
-    width: 150px !important;      /* 元の1200pxの8分の1 */
-    max-width: 150px !important;
+  :global(.hero-image img) {
+    max-width: 600px !important;
+    width: 100% !important;
     height: auto !important;
-    margin-left: 0 !important;   /* 強制左寄せ */
+    margin-left: 0 !important;
     margin-right: auto !important;
     border-radius: 8px;
-    object-fit: cover !important;
+    object-fit: contain !important;
   }
 </style>
