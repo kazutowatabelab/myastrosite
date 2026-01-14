@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+const title = "Contact";
+const description = "Contact form for this website.";
+---
+
+<Layout title={title} description={description} pubDate={new Date('2026-01-15')}>
+  <article>
+    <div class="header-section">
+      <h1>{title}</h1>
+      <p>If you have any questions, please contact me using the form below.</p>
+    </div>
+
+    <div class="form-wrapper">
+      <iframe 
+        src="https://docs.google.com/forms/d/e/1FAIpQLSfP8VCCUkxQwfWUJCwQHF0YTm1c4t3bOfhjdPucI8c6mYRRTw/viewform?embedded=true" 
+        width="100%" 
+        height="700" 
+        frameborder="0" 
+        marginheight="0" 
+        marginwidth="0">Loading…</iframe>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2em 1em;
+  }
+  .header-section {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .form-wrapper {
+    background: #fff; /* フォームの背景と合わせる */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* ほんの少し影をつけて独立させる */
+    border: 1px solid #eee;
+  }
+  iframe {
+    display: block;
+    width: 100%;
+  }
+</style>
