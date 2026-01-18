@@ -5,24 +5,44 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-// Propsの型を CollectionEntry に依存せず、直接定義して柔軟にします
 interface Props {
 	title: string;
 	description: string;
-	pubDate?: Date; // ? をつけて、なくてもOKにします
-	updatedDate?: Date;
+	pubDate?: Date | string; // 文字列でも受け取れるように拡張
+	updatedDate?: Date | string;
 	heroImage?: string;
 }
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+// 日付が文字列（String）で届いてもエラーにならないよう Date オブジェクトに変換
+const displayPubDate = pubDate ? new Date(pubDate) : null;
+const displayUpdatedDate = updatedDate ? new Date(updatedDate) : null;
+
+// SEO用の構造化データ (JSON-LD)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": heroImage ? [heroImage] : [],
+  "datePublished": displayPubDate ? displayPubDate.toISOString() : "",
+  "dateModified": displayUpdatedDate ? displayUpdatedDate.toISOString() : (displayPubDate ? displayPubDate.toISOString() : ""),
+  "author": {
+    "@type": "Person",
+    "name": "Mirai Anchorage Japan" 
+  }
+};
 ---
 
 <!doctype html>
 <html lang="ja">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={heroImage} />
 		<meta name="google-site-verification" content="423s3g5USTWu7mAnfbUbmZKaCvx26tnHg1wV1JhePIo" />
 		
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
 		<style>
 			:root {
 				--bg-primary: #0a0a0f;
@@ -56,7 +76,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 
 			.article-header {
-				margin-bottom: 3rem;
+				margin-bottom: 2rem;
 			}
 
 			.hero-image-container {
@@ -104,6 +124,24 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				font-style: italic;
 			}
 
+			.ad-space {
+				background: var(--bg-card);
+				border: 1px dashed var(--border);
+				border-radius: 8px;
+				padding: 1.5rem;
+				margin: 2rem 0;
+				text-align: center;
+				color: var(--text-secondary);
+				font-size: 0.9rem;
+			}
+			.ad-label {
+				display: block;
+				font-size: 0.7rem;
+				margin-bottom: 0.5rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+			}
+
 			.article-content {
 				color: var(--text-primary);
 				font-size: 1.125rem;
@@ -124,20 +162,31 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					)}
 					<h1 class="article-title">{title}</h1>
 					<div class="article-meta">
-						{pubDate && (
+						{displayPubDate && (
 							<p class="article-date">
-								<FormattedDate date={pubDate} />
+								<FormattedDate date={displayPubDate} />
 							</p>
 						)}
-						{updatedDate && (
+						{displayUpdatedDate && (
 							<p class="article-updated">
-								Last Updated: <FormattedDate date={updatedDate} />
+								Last Updated: <FormattedDate date={displayUpdatedDate} />
 							</p>
 						)}
 					</div>
 				</header>
+
+				<div class="ad-space">
+					<span class="ad-label">Advertisement</span>
+					<p>Sponsored Content</p>
+				</div>
+
 				<div class="article-content">
 					<slot />
+				</div>
+
+				<div class="ad-space">
+					<span class="ad-label">Advertisement</span>
+					<p>Sponsored Content</p>
 				</div>
 			</article>
 		</main>
