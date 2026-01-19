@@ -6,7 +6,7 @@ import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-// データの取得を try-catch で囲み、エラー時に画面が止まらないようにします
+// データの取得
 let posts = [];
 try {
 	const allPosts = await getBlogs();
@@ -15,7 +15,15 @@ try {
 	console.error("Failed to fetch posts:", e);
 }
 
-const currentLang = 'en';
+// トップページ用の構造化データ (WebSite)
+// 検出率を高めるため、URLを明示的に指定した安定版です
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": SITE_TITLE,
+  "description": SITE_DESCRIPTION,
+  "url": "https://ma-japan.vercel.app/"
+};
 ---
 
 <!doctype html>
@@ -24,6 +32,8 @@ const currentLang = 'en';
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<meta name="google-site-verification" content="423s3g5USTWu7mAnfbUbmZKaCvx26tnHg1wV1JhePIo" />
 		
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
 		<style>
 			:root {
 				--bg-primary: #0a0a0f;
@@ -58,8 +68,8 @@ const currentLang = 'en';
 		<Header />
 		<main>
 			<section class="hero-section">
-				<h1 class="hero-title">Mirai Anchorage Japan</h1>
-				<p class="hero-subtitle">Exploring the possibilities of Unity and AI.</p>
+				<h1 class="hero-title">{SITE_TITLE}</h1>
+				<p class="hero-subtitle">{SITE_DESCRIPTION}</p>
 			</section>
 
 			<section class="content-section">
