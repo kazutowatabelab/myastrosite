@@ -4,7 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION, SITE_DETAILED_DESCRIPTION, SITE_TITLE } from '../consts';
 
 // データの取得
 let posts = [];
@@ -16,12 +16,12 @@ try {
 }
 
 // トップページ用の構造化データ (WebSite)
-// 検出率を高めるため、URLを明示的に指定した安定版です
+// Astro.site を使わず、直接文字列で指定して強制上書きします
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": SITE_TITLE,
-  "description": SITE_DESCRIPTION,
+  "name": "Mirai Anchorage Japan",
+  "description": "Exploring the possibilities of Unity and AI.",
   "url": "https://ma-japan.vercel.app/"
 };
 ---
@@ -49,6 +49,8 @@ const jsonLd = {
 			.hero-section { position: relative; min-height: 30vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; background: linear-gradient(135deg, #0a0a0f 0%, #121218 50%, #0f0f15 100%); text-align: center; overflow: hidden; }
 			.hero-title { font-size: 4rem; font-weight: 700; margin: 0 0 1rem 0; background: linear-gradient(135deg, #ffffff 0%, #a0a0a8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1; width: 100%; }
 			.hero-subtitle { font-size: 1.5rem; color: var(--text-secondary); position: relative; z-index: 1; width: 100%; }
+			.detailed-description-section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; text-align: center; }
+			.detailed-description { font-size: 1.125rem; line-height: 1.8; color: var(--text-primary); max-width: 800px; margin: 0 auto; }
 			.content-section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
 			.section-title { font-size: 2.5rem; font-weight: 700; margin: 0 0 3rem 0; color: var(--text-primary); }
 			.logs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 6rem; }
@@ -70,6 +72,12 @@ const jsonLd = {
 			<section class="hero-section">
 				<h1 class="hero-title">{SITE_TITLE}</h1>
 				<p class="hero-subtitle">{SITE_DESCRIPTION}</p>
+			</section>
+
+			<section class="detailed-description-section">
+				<div class="detailed-description">
+					{SITE_DETAILED_DESCRIPTION}
+				</div>
 			</section>
 
 			<section class="content-section">
