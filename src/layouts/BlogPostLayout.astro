@@ -16,11 +16,46 @@ const title = isEn
 const pubDate = content?.publishedAt || props.pubDate;
 const heroImage = content?.eyecatch?.url || props.heroImage;
 
+// HTMLからテキストを抽出する関数（100文字程度）
+function extractTextFromHtml(html: string, maxLength: number = 100): string {
+  if (!html) return '';
+  
+  // HTMLタグを除去
+  let text = html.replace(/<[^>]*>/g, '');
+  // 改行や連続する空白を整理
+  text = text.replace(/\s+/g, ' ').trim();
+  // 指定文字数で切り取り
+  if (text.length > maxLength) {
+    text = text.substring(0, maxLength);
+    // 最後の単語が途中で切れないように調整
+    const lastSpace = text.lastIndexOf(' ');
+    if (lastSpace > maxLength * 0.7) {
+      text = text.substring(0, lastSpace);
+    }
+    text += '...';
+  }
+  return text;
+}
+
+// 説明文の生成（優先順位: descriptionフィールド > 本文から抽出）
+const rawDescription = isEn 
+  ? (content?.description_en || content?.description || '')
+  : (content?.description || '');
+
+const rawContent = isEn 
+  ? (content?.content_en || content?.content || '')
+  : (content?.content || '');
+
+// 説明文フィールドがあればそれを使い、なければ本文から抽出
+const description = rawDescription 
+  ? (rawDescription.length > 100 ? rawDescription.substring(0, 100) + '...' : rawDescription)
+  : extractTextFromHtml(rawContent, 100);
+
 const jpPath = `/blog/jp/${currentSlug}`;
 const enPath = `/blog/en/${currentSlug}`;
 ---
 
-<BlogPost title={title} pubDate={pubDate} heroImage={heroImage} {...props}>
+<BlogPost title={title} description={description} pubDate={pubDate} heroImage={heroImage} lang={isEn ? 'en' : 'ja'} {...props}>
   <div class="lang-switch">
     <a href={jpPath} class={lang === 'jp' ? 'active' : ''}>日本語</a>
     <span>/</span>

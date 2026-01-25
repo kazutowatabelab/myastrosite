@@ -11,9 +11,10 @@ interface Props {
 	pubDate?: Date | string; // 文字列でも受け取れるように拡張
 	updatedDate?: Date | string;
 	heroImage?: string;
+	lang?: string; // 言語コード
 }
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, lang = 'ja' } = Astro.props;
 
 // 日付が文字列（String）で届いてもエラーにならないよう Date オブジェクトに変換
 const displayPubDate = pubDate ? new Date(pubDate) : null;
@@ -36,9 +37,9 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="ja">
+<html lang={lang}>
 	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
+		<BaseHead title={title} description={description} image={heroImage} type="article" />
 		<meta name="google-site-verification" content="423s3g5USTWu7mAnfbUbmZKaCvx26tnHg1wV1JhePIo" />
 		
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

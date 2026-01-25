@@ -7,11 +7,16 @@ interface Props {
 	title: string;
 	description: string;
 	image?: string;
+	type?: 'website' | 'article'; // OGPタイプを指定可能に
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const absoluteURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
+const { title, description, image = '/blog-placeholder-1.jpg', type = 'website' } = Astro.props;
+
+// 画像URLを絶対URLに変換
+const imageURL = image ? new URL(image, Astro.site) : new URL('/blog-placeholder-1.jpg', Astro.site);
 ---
 
 <meta charset="utf-8" />
@@ -28,17 +33,18 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={absoluteURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:site_name" content="Mirai Anchorage Japan" />
 
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:url" content={absoluteURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={imageURL} />
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FCFSDDN08J"></script>
 <script is:inline>
